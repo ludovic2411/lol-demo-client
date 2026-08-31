@@ -5,7 +5,7 @@ import {Position} from '../../models/Position';
 import {ChampionType, findChampionTypeByDescription} from '../../models/ChampionType';
 import {FetchingServiceService} from '../fetching-service.service';
 import {LanguageService} from '../languages/language.service';
-import {AuthService} from '../auth/auth.service';
+import {JwtAuthService} from '../auth/jwt-auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +13,9 @@ import {AuthService} from '../auth/auth.service';
 export class AppServiceService {
 
   private languageService: LanguageService;
-  private authService: AuthService;
+  private authService: JwtAuthService;
 
-  constructor(languageService:LanguageService, authService: AuthService) {
+  constructor(languageService:LanguageService, authService: JwtAuthService) {
     this.languageService = languageService;
     this.authService = authService;
     if (!sessionStorage.getItem('languageOptions')) {

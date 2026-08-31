@@ -4,11 +4,15 @@ import {authService} from '../backend/login/auth.service';
 import {LoginRequest} from '../../models/backend/login/LoginRequest';
 import {LoginResponse} from '../../models/backend/login/LoginResponse';
 import {Observable} from 'rxjs';
+import {IAuthService} from './IAuthService';
 
+/**
+ * Implements authentication with basic jwt token
+ */
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class JwtAuthService implements IAuthService {
 
   private loginService: authService;
 

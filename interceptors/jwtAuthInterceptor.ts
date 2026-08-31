@@ -1,6 +1,6 @@
 import {HttpEvent, HttpHandlerFn, HttpRequest} from '@angular/common/http';
 import {inject} from '@angular/core';
-import {AuthService} from '../services/auth/auth.service';
+import {JwtAuthService} from '../services/auth/jwt-auth.service';
 import {Observable, throwError} from 'rxjs';
 import {LoginResponse} from '../models/backend/login/LoginResponse';
 
@@ -15,7 +15,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   } else {
     console.log(`Adding authorization credentials before request to: ${req.method} ${req.url}`);
 
-    const token: LoginResponse | null = inject(AuthService).getTokenFromStorage();
+    const token: LoginResponse | null = inject(JwtAuthService).getTokenFromStorage();
     if (token === null) throwError(() => new Error('Authorization credentials not found'));
     const newReq = req.clone({
       headers: req.headers
