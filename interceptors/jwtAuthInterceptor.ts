@@ -8,7 +8,12 @@ const urlsToTest: string[] = ['/login', '/user/create', '/reset/token'];
 const ignorePostRequests = (req: HttpRequest<unknown>): boolean => { return req.method === 'POST' && urlsToTest.some(url => req.url.endsWith(url))}
 const ignorePatchRequets = (req: HttpRequest<unknown>): boolean => { return req.method === 'PATCH' && req.url.endsWith(urlsToTest[2])}
 
-export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+/**
+ * Interceptor for basic jwt authentication
+ * @param req
+ * @param next
+ */
+export function JwtAuthInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   // Don't add token if we login for the first time
   if((ignorePostRequests(req) || ignorePatchRequets(req)) && !sessionStorage.getItem('token')) {
     return next(req);
