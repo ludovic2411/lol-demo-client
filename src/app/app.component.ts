@@ -5,7 +5,7 @@ import {AppServiceService} from '../../services/app/app-service.service';
 import {LoginPageComponent} from '../components/pages/login-page/login-page.component';
 import {ChampionsPageComponent} from '../components/pages/champions-page/champions-page.component';
 import {MyProfilePageComponent} from '../components/pages/my-profile-page/my-profile-page.component';
-import {AuthService} from '../../services/auth/auth.service';
+import {JwtAuthService} from '../../services/auth/jwt-auth.service';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +15,7 @@ import {AuthService} from '../../services/auth/auth.service';
 })
 export class AppComponent {
   private appService: AppServiceService = inject(AppServiceService)
-  private authService: AuthService = inject(AuthService);
+  private authService: JwtAuthService = inject(JwtAuthService);
   #router: Router = inject(Router);
   title: String = 'my-little-angular-app';
   isBeginner: boolean = false;

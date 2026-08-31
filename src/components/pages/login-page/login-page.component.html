@@ -15,6 +15,7 @@
           <app-text-input [inputId]="'login-password'"  [inputControl]="password"  [isPassword]="true" [placeHolder]="passwordlabel" (inputChanged)="onPasswordUpdate($event)"></app-text-input>
         </p>
       <p><app-standard-button [buttonId]="'login-button'" (clicked)="login()" buttonText="Login" [isDisabled]="!userName.valid || !password.valid"></app-standard-button> <span id="signup-link" (click)="goToSignup()">Create account </span></p>
+      <p><app-standard-button [buttonId]="'login-keycloak-button'" (clicked)="loginWithKeycloak()" buttonText="Login with Keycloak"></app-standard-button></p>
       <p><span id="reset-password-link" (click)="goToResetPassword()">Password forgotten? </span></p>
       @if (wrongLogin) {
         <p id="wrong-login-message"><span>Wrong username or password</span></p>

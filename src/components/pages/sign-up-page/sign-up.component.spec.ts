@@ -8,14 +8,14 @@ import {Router} from '@angular/router';
 import {SignupResponse} from '../../../../models/backend/signup/SignupResponse';
 import {SignupRequest} from '../../../../models/backend/signup/SignupRequest';
 import {of} from 'rxjs';
-import {AuthService} from '../../../../services/auth/auth.service';
+import {JwtAuthService} from '../../../../services/auth/jwt-auth.service';
 import {LoginResponse} from '../../../../models/backend/login/LoginResponse';
 
 describe('SignUpComponent', () => {
   let component: SignUpComponent;
   let fixture: ComponentFixture<SignUpComponent>;
   let signupServiceSpy: jasmine.SpyObj<SignupService>
-  let authServiceSpy: jasmine.SpyObj<AuthService>
+  let authServiceSpy: jasmine.SpyObj<JwtAuthService>
   let router: Router;
 
   beforeEach(async () => {
@@ -26,7 +26,7 @@ describe('SignUpComponent', () => {
       imports: [SignUpComponent, HttpClientTestingModule],
       providers: [
         {provide: SignupService, useValue: signupSpy},
-        {provide: AuthService, useValue: loginSpy},
+        {provide: JwtAuthService, useValue: loginSpy},
         {provide: Router, useValue: routerSpy}
       ]
     })
@@ -35,7 +35,7 @@ describe('SignUpComponent', () => {
     fixture = TestBed.createComponent(SignUpComponent);
     component = fixture.componentInstance;
     signupServiceSpy = TestBed.inject(SignupService) as jasmine.SpyObj<SignupService>;
-    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authServiceSpy = TestBed.inject(JwtAuthService) as jasmine.SpyObj<JwtAuthService>;
     router = TestBed.inject(Router);
     fixture.detectChanges();
   });

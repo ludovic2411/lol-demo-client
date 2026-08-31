@@ -8,7 +8,7 @@ import {AvalaibleOption} from '../../../../models/AvalaibleOption';
 import {SignupService} from '../../../../services/backend/signup/signup.service';
 import {SignupRequest} from '../../../../models/backend/signup/SignupRequest';
 import {SignupResponse} from '../../../../models/backend/signup/SignupResponse';
-import {AuthService} from '../../../../services/auth/auth.service';
+import {JwtAuthService} from '../../../../services/auth/jwt-auth.service';
 import {LoginRequest} from '../../../../models/backend/login/LoginRequest';
 import {ErrorMessageDto} from '../../../../models/backend/errors/ErrorMessageDto';
 import {lastValueFrom} from 'rxjs';
@@ -55,7 +55,7 @@ export class SignUpComponent {
   ]);
 
 
-  constructor(private signupService: SignupService, private authService: AuthService) {
+  constructor(private signupService: SignupService, private authService: JwtAuthService) {
     this.#router = inject(Router);
   }
 
