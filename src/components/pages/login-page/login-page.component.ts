@@ -7,7 +7,7 @@ import {TextInputComponent} from '../../text-input/text-input.component';
 import {StandardButtonComponent} from '../../standard-button/standard-button.component';
 import {firstValueFrom} from 'rxjs';
 import {LoginResponse} from '../../../../models/backend/login/LoginResponse';
-import {KeyCloakAuthService} from '../../../../services/auth/key-cloak-auth.service';
+import {KeycloakAuthService} from '../../../../services/auth/keycloak-auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -22,7 +22,7 @@ import {KeyCloakAuthService} from '../../../../services/auth/key-cloak-auth.serv
 export class LoginPageComponent {
 
   authService: JwtAuthService = inject(JwtAuthService);
-  keycloakAuthService: KeyCloakAuthService = inject(KeyCloakAuthService);
+  keycloakAuthService: KeycloakAuthService = inject(KeycloakAuthService);
   #router = inject(Router);
 
   pageTitle: string = 'Login';

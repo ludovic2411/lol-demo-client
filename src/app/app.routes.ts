@@ -22,7 +22,7 @@ export const routes: Routes = [
     // Route protégée : requires authentification
     canActivate: [KeyCloakAuthGuard],
     component: DashboardComponent,
-    loadComponent: () => import('../components/dashboard/dashboard.component').then(m => m.DashboardComponent)
+    //loadComponent: () => import('../components/dashboard/dashboard.component').then(m => m.DashboardComponent)
   },
   { path: 'login', component: LoginPageComponent },
   { path: 'reset/ask', component: AskResetComponent },

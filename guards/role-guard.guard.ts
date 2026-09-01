@@ -1,12 +1,12 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {Injectable} from '@angular/core';
-import {KeyCloakAuthService} from '../services/auth/key-cloak-auth.service';
+import {KeycloakAuthService} from '../services/auth/keycloak-auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KeyCloakAuthGuard {
-  constructor(private authService: KeyCloakAuthService, private router: Router) { }
+  constructor(private authService: KeycloakAuthService, private router: Router) { }
 
   canActivate: CanActivateFn = (route, state) => {
     if (!this.authService.isLoggedIn()) {

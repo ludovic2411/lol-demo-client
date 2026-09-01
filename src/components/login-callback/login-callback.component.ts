@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { KeyCloakAuthService} from '../../../services/auth/key-cloak-auth.service';
+import { KeycloakAuthService} from '../../../services/auth/keycloak-auth.service';
 
 /**
  * Composant de callback après redirection de Keycloak
@@ -58,7 +58,7 @@ import { KeyCloakAuthService} from '../../../services/auth/key-cloak-auth.servic
 export class LoginCallbackComponent implements OnInit {
 
   constructor(
-    private authService: KeyCloakAuthService,
+    private authService: KeycloakAuthService,
     private router: Router
   ) { }
 

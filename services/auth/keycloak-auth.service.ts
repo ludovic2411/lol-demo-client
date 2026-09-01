@@ -10,7 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class KeyCloakAuthService implements IAuthService {
+export class KeycloakAuthService implements IAuthService {
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
@@ -39,7 +39,8 @@ export class KeyCloakAuthService implements IAuthService {
       // Flow recommandé pour SPA
       responseType: 'code',
       // PKCE for better security(SPA)
-      usePkceWithAuthorizationCodeFlow: true,
+      //usePkceWithAuthorizationCodeFlow: true,
+      disablePKCE: false,
       // Log in console (optionnel, pour debug)
       logoutUrl: 'http://localhost:9090/realms/lol-demo-server-realm/protocol/openid-connect/logout',
       //  tokens management
