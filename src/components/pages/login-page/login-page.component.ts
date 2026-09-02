@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {JwtAuthService} from '../../../../services/auth/jwt-auth.service';
 import {LoginRequest} from '../../../../models/backend/login/LoginRequest';
@@ -19,7 +19,10 @@ import {KeycloakAuthService} from '../../../../services/auth/keycloak-auth.servi
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
+  ngOnInit(): void {
+      this.loginWithKeycloak();
+  }
 
   authService: JwtAuthService = inject(JwtAuthService);
   keycloakAuthService: KeycloakAuthService = inject(KeycloakAuthService);

@@ -27,19 +27,23 @@ export class KeycloakAuthService implements IAuthService {
    * Configure OAuth2/OIDC with Keycloak parameters
    */
   private setupOAuth2(): void {
+    const REALM_BASE_URL = 'http://localhost:9090/realms/lol-demo-server-realm';
+    const REDIRECT_BASE_URI = window.location.origin + '/login/callback';
+    const CLIENT_ID = 'lol-demo-server-client';
     this.oauthService.configure({
-      clientId: 'lol-demo-server-client',
-      redirectUri: window.location.origin + '/login/callback',
+      loginUrl: `${REALM_BASE_URL}/protocol/openid-connect/auth`,
+      clientId: CLIENT_ID,
+      redirectUri: REDIRECT_BASE_URI,
       //  logout
       postLogoutRedirectUri: window.location.origin + '/',
       // Keycloak issuer
-      issuer: 'http://localhost:9090/realms/lol-demo-server-realm',
+      issuer: REALM_BASE_URL,
       // Scopes
       scope: 'openid profile email',
       // Flow recommandé pour SPA
       responseType: 'code',
       // PKCE for better security(SPA)
-      //usePkceWithAuthorizationCodeFlow: true,
+      //usePkceWithAuthorizationCodeFlow: true, => keep it for angular-oidc 22
       disablePKCE: false,
       // Log in console (optionnel, pour debug)
       logoutUrl: 'http://localhost:9090/realms/lol-demo-server-realm/protocol/openid-connect/logout',
