@@ -6,6 +6,7 @@ import {LoginPageComponent} from '../components/pages/login-page/login-page.comp
 import {ChampionsPageComponent} from '../components/pages/champions-page/champions-page.component';
 import {MyProfilePageComponent} from '../components/pages/my-profile-page/my-profile-page.component';
 import {JwtAuthService} from '../../services/auth/jwt-auth.service';
+import {KeycloakAuthService} from '../../services/auth/keycloak-auth.service';
 
 @Component({
     selector: 'app-root',
@@ -16,6 +17,7 @@ import {JwtAuthService} from '../../services/auth/jwt-auth.service';
 export class AppComponent {
   private appService: AppServiceService = inject(AppServiceService)
   private authService: JwtAuthService = inject(JwtAuthService);
+  private keycloakAuthService: KeycloakAuthService = inject(KeycloakAuthService);
   #router: Router = inject(Router);
   title: String = 'my-little-angular-app';
   isBeginner: boolean = false;
@@ -25,7 +27,11 @@ export class AppComponent {
   this.isBeginner =  this.appService.toggleBeginner(this.isBeginner)
   }
 
-  async logout(): Promise<void> {
+  logout(): void {
+    this.keycloakAuthService.logout();
+  }
+
+ /* async logout(): Promise<void> {
     if(sessionStorage.getItem('token') || localStorage.getItem('token')) {
       this.authService.logout().subscribe(
         {
@@ -41,7 +47,7 @@ export class AppComponent {
       sessionStorage.removeItem('token');
       localStorage.removeItem('token');
       this.#router.navigate(['login']);
-  }
+  }*/
 
   handleLogoutError = (e: any):void => console.error(`Problem while logging out: ${e}`);
 
