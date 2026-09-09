@@ -28,14 +28,17 @@ export class KeycloakAuthService implements IAuthService {
    */
   private setupOAuth2(): void {
     const REALM_BASE_URL = 'http://localhost:9090/realms/lol-demo-server-realm';
-    const REDIRECT_BASE_URI = window.location.origin + '/login/callback';
+    const REDIRECT_BASE_URI = `${window.location.origin}/login/callback`;
     const CLIENT_ID = 'lol-demo-server-client';
+    const LOGOUT_BASE_URL = `${REALM_BASE_URL}/protocol/openid-connect/logout`;
+    const POST_LOGOUT_URI = `${window.location.origin}/logout/success`;
     this.oauthService.configure({
+      //url to locate keycloak login portal
       loginUrl: `${REALM_BASE_URL}/protocol/openid-connect/auth`,
       clientId: CLIENT_ID,
       redirectUri: REDIRECT_BASE_URI,
       //  logout
-      postLogoutRedirectUri: window.location.origin + '/',
+      postLogoutRedirectUri: POST_LOGOUT_URI,
       // Keycloak issuer
       issuer: REALM_BASE_URL,
       // Scopes
@@ -45,8 +48,9 @@ export class KeycloakAuthService implements IAuthService {
       // PKCE for better security(SPA)
       //usePkceWithAuthorizationCodeFlow: true, => keep it for angular-oidc 22
       disablePKCE: false,
-      // Log in console (optionnel, pour debug)
-      logoutUrl: 'http://localhost:9090/realms/lol-demo-server-realm/protocol/openid-connect/logout',
+      //Url to redirect for logging out
+      //http://localhost:9090/realms/lol-demo-server-realm/protocol/openid-connect/logout?id_token_hint=
+      logoutUrl: `${REALM_BASE_URL}/protocol/openid-connect/logout`,
       //  tokens management
       requireHttps: false, //  true prod
       showDebugInformation: true //  false prod
@@ -56,7 +60,7 @@ export class KeycloakAuthService implements IAuthService {
     this.oauthService.events.subscribe((event: OAuthEvent) => {
       if (event instanceof OAuthSuccessEvent) {
         if (event.type === 'token_received') {
-          console.log('Token reçu !');
+          console.log('Token received !');
           this.updateAuthStatus();
         }
       }
@@ -64,7 +68,7 @@ export class KeycloakAuthService implements IAuthService {
   }
 
   /**
-   * Vérifie si l'utilisateur est déjà connecté (au chargement de l'app)
+   * Check whether user is already logged in at app start page
    */
   private checkIfAlreadyLoggedIn(): void {
     // Essaie de charger les tokens depuis le storage
@@ -74,14 +78,14 @@ export class KeycloakAuthService implements IAuthService {
   }
 
   /**
-   * Vérifie s'il existe un token valide
+   * Check if a valid token exists
    */
   private hasValidToken(): boolean {
     return !!this.oauthService.getAccessToken();
   }
 
   /**
-   * Met à jour l'état d'authentification
+   * Update authentication state
    */
   private updateAuthStatus(): void {
     const isLoggedIn = this.oauthService.hasValidAccessToken();
@@ -100,45 +104,59 @@ export class KeycloakAuthService implements IAuthService {
   }
 
   /**
-   * Lance le flow de login OAuth2 (redirection vers Keycloak)
+   * Starts login OAuth2 (redirection to Keycloak)
    */
   login(): void {
-    // Initie le flow Authorization Code avec PKCE
+    // InitAuthorization Code flow with PKCE
     this.oauthService.initCodeFlow();
   }
 
   /**
    * Traite le callback après authentification (appelé après redirection de Keycloak)
    * À appeler dans un composant avec une route /login/callback
+   * Handle callback after authentication (after keycloak redirection)
+   * Need to call it in a component with /login/callback route
    */
   handleLoginCallback(): Promise<void> {
     return this.oauthService.loadDiscoveryDocumentAndTryLogin().then(() => {
       this.updateAuthStatus();
-      console.log('Login callback traité, token acquis');
+      console.log('Login callback handled, token acquired');
     }).catch(err => {
-      console.error('Erreur lors du callback login', err);
+      console.error('Error encountered while handling callback login', err);
     });
   }
 
   /**
-   * Logout et suppression du token
+   * Logout and token suppression for angular-oidc 19
    */
   logout(): void {
-    this.oauthService.revokeTokenAndLogout();
+    // revokeTokenAndLogout envoie id_token_hint automatiquement
+    // et redirige vers postLogoutRedirectUri après déconnexion Keycloak
+    this.oauthService.logOut();
     this.isAuthenticatedSubject.next(false);
     this.currentUserSubject.next(null);
   }
 
   /**
-   * Récupère le token JWT courant
+   * Logout and token suppression TODO use it with angular/angular-oidc v22
+
+  logout(): void {
+    this.oauthService.revokeTokenAndLogout();
+    this.isAuthenticatedSubject.next(false);
+    this.currentUserSubject.next(null);
+  }
+    */
+
+  /**
+   * Get current JWT
    */
   getAccessToken(): string | null {
     return this.oauthService.getAccessToken();
   }
 
   /**
-   * Récupère les rôles de l'utilisateur depuis le JWT
-   * Keycloak les place dans : resource_access.<client-id>.roles
+   * Get user roles from JWT
+   * Keycloak put them in : resource_access.<client-id>.roles
    */
   getUserRoles(): string[] {
     const claims = this.oauthService.getIdentityClaims() as any;
@@ -153,21 +171,21 @@ export class KeycloakAuthService implements IAuthService {
   }
 
   /**
-   * Vérifie si l'utilisateur a un rôle spécifique
+   * Check if user has a given role
    */
   hasRole(role: string): boolean {
     return this.getUserRoles().includes(role);
   }
 
   /**
-   * Récupère l'identité actuelle (claims du JWT)
+   * Get current identity (claims from JWT)
    */
   getUserInfo(): any {
     return this.oauthService.getIdentityClaims();
   }
 
   /**
-   * Vérifie si l'utilisateur est authentifié
+   * Check wether user is identifed
    */
   isLoggedIn(): boolean {
     return this.oauthService.hasValidAccessToken();

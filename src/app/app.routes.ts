@@ -11,6 +11,7 @@ import {DoResetComponent} from '../components/pages/reset-password/do-reset/do-r
 import {LoginCallbackComponent} from '../components/login-callback/login-callback.component';
 import {KeyCloakAuthGuard} from '../../guards/key-cloak-auth-guard.guard';
 import {DashboardComponent} from '../components/dashboard/dashboard.component';
+import {LogoutSuccessComponent} from '../components/pages/logout-success/logout-success.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,7 @@ export const routes: Routes = [
     //loadComponent: () => import('../components/dashboard/dashboard.component').then(m => m.DashboardComponent)
   },
   { path: 'login', component: LoginPageComponent },
+  { path: 'logout/success', component: LogoutSuccessComponent },
   { path: 'reset/ask', component: AskResetComponent },
   { path: 'reset/do', component: DoResetComponent },
   {path: 'signup', component: SignUpComponent},
