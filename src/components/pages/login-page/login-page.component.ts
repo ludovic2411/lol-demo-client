@@ -1,26 +1,31 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../../../services/auth/auth.service';
+import {JwtAuthService} from '../../../../services/auth/jwt-auth.service';
 import {LoginRequest} from '../../../../models/backend/login/LoginRequest';
 import {Router} from '@angular/router';
 import {TextInputComponent} from '../../text-input/text-input.component';
 import {StandardButtonComponent} from '../../standard-button/standard-button.component';
 import {firstValueFrom} from 'rxjs';
 import {LoginResponse} from '../../../../models/backend/login/LoginResponse';
+import {KeycloakAuthService} from '../../../../services/auth/keycloak-auth.service';
 
 @Component({
   selector: 'app-login-page',
   imports: [
     StandardButtonComponent,
     TextInputComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
+  ngOnInit(): void {
+      this.loginWithKeycloak();
+  }
 
-  authService: AuthService = inject(AuthService);
+  authService: JwtAuthService = inject(JwtAuthService);
+  keycloakAuthService: KeycloakAuthService = inject(KeycloakAuthService);
   #router = inject(Router);
 
   pageTitle: string = 'Login';
@@ -49,6 +54,11 @@ export class LoginPageComponent {
 
   goToResetPassword(): void {
     this.#router.navigate(['reset/ask']);
+  }
+
+  loginWithKeycloak(): void {
+    console.log('Starting login OAuth2...');
+    this.keycloakAuthService.login();
   }
 
   async login(): Promise<void> {

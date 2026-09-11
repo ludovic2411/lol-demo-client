@@ -4,7 +4,7 @@ import { LoginPageComponent } from './login-page.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {Component} from '@angular/core';
 import {provideRouter, Router} from '@angular/router';
-import {AuthService} from '../../../../services/auth/auth.service';
+import {JwtAuthService} from '../../../../services/auth/jwt-auth.service';
 import Jasmine = jasmine.Jasmine;
 import {LoginResponse} from '../../../../models/backend/login/LoginResponse';
 import {of, throwError} from 'rxjs';
@@ -14,7 +14,7 @@ describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
   let fixture: ComponentFixture<LoginPageComponent>;
   let router: Router;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let authServiceSpy: jasmine.SpyObj<JwtAuthService>;
   let token: LoginResponse = {
     token: 'myLittleToken'
   }
@@ -26,7 +26,7 @@ describe('LoginPageComponent', () => {
       imports: [LoginPageComponent,  HttpClientTestingModule],
       providers
         : [
-        { provide: AuthService, useValue: spy},
+        { provide: JwtAuthService, useValue: spy},
         { provide: Router, useValue: routerSpy },
         provideRouter([])
       ]
@@ -36,7 +36,7 @@ describe('LoginPageComponent', () => {
 
     fixture = TestBed.createComponent(LoginPageComponent);
     component = fixture.componentInstance;
-    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
+    authServiceSpy = TestBed.inject(JwtAuthService) as jasmine.SpyObj<JwtAuthService>;
     router = TestBed.inject(Router);
     fixture.detectChanges();
   });

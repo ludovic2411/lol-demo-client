@@ -8,9 +8,25 @@ import {ChampionInfoComponent} from '../components/pages/champion-info/champion-
 import {SignUpComponent} from '../components/pages/sign-up-page/sign-up.component';
 import {AskResetComponent} from '../components/pages/reset-password/ask-reset/ask-reset.component';
 import {DoResetComponent} from '../components/pages/reset-password/do-reset/do-reset.component';
+import {LoginCallbackComponent} from '../components/login-callback/login-callback.component';
+import {KeyCloakAuthGuard} from '../../guards/key-cloak-auth-guard.guard';
+import {DashboardComponent} from '../components/dashboard/dashboard.component';
+import {LogoutSuccessComponent} from '../components/pages/logout-success/logout-success.component';
 
 export const routes: Routes = [
+  {
+    path: 'login/callback',
+    component: LoginCallbackComponent
+  },
+  {
+    path: 'dashboard',
+    // Route protégée : requires authentification
+    canActivate: [KeyCloakAuthGuard],
+    component: DashboardComponent,
+    //loadComponent: () => import('../components/dashboard/dashboard.component').then(m => m.DashboardComponent)
+  },
   { path: 'login', component: LoginPageComponent },
+  { path: 'logout/success', component: LogoutSuccessComponent },
   { path: 'reset/ask', component: AskResetComponent },
   { path: 'reset/do', component: DoResetComponent },
   {path: 'signup', component: SignUpComponent},
@@ -18,6 +34,6 @@ export const routes: Routes = [
   {path: 'champions/:name', component: ChampionInfoComponent},
   {path: 'my-profile', component: MyProfilePageComponent },
   {path: 'objects', component: ObjectPageComponent },
-  {path: '', redirectTo:'/login',pathMatch: 'full'},
+  {path: '', redirectTo:'/dashboard',pathMatch: 'full'},
   {path: '**', component: NotFoundPageComponent}
 ];
