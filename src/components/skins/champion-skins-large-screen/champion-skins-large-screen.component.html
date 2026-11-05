@@ -1,0 +1,15 @@
+<div class="champion-skin-splash-large-screen">
+  <img [ngSrc]="skins[activeSkin].skinURI.toString()" priority height="717" width="1215">
+  <p>
+    @if (activeSkin > 0) {
+      <i class="fa-solid fa-angles-left" (click)="goToPrevSkin()"></i>
+    }
+    {{ skins[activeSkin].name }} {{ activeSkin + 1 }}/{{ skins.length }}
+    @if (activeSkin > 0) {
+      <input id="skin-owned-checkbox" matTooltip="{{skins[activeSkin].owned ? ownedSkinPlaceholder : checkSkinPlaceholder}}" matTooltipPosition="above" type="checkbox" (change)="toggleSkinOwned(skins[activeSkin])" [checked]="skins[activeSkin].owned"/>
+    }
+    @if (activeSkin < skins.length - 1) {
+      <i class="fa-solid fa-angles-right" (click)="goToNextSkin()"></i>
+    }
+  </p>
+</div>

@@ -1,0 +1,10 @@
+<div class="champion-skins-container">
+  <h3>Skins</h3>
+  <!-- Large screens -->
+  <!-- Find a better way because picture does not load without refresh -->
+  @if (isLargeScreen()) {
+    <app-champion-skins-large-screen [skins]="skins" [champion]="champion" />
+  } @else {
+    <app-champion-skins-small-screen [skins]="skins" [champion]="champion" />
+  }
+</div>

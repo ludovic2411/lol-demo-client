@@ -27,12 +27,14 @@ export class ChampionFetchingService {
   }
 
   /**
-   * No body is required
+   * No body is required so it is empty
    * @param name
    * @param skinId
    * @param owned
    */
-  updateOwnedChampionSkin(name: string, skinId: number, owned: boolean) {
-    return this.httpClient.patch(this.backendProperties.OWNED_SKIN_ENDPOINT.concat(`/${name}/${skinId}?owned=${owned}`),{});
+  //"/{name}/skins/{skin}/ownership"
+  updateOwnedChampionSkin(name: string, skinId: string, owned: boolean) {
+    return owned ? this.httpClient.put(this.backendProperties.getOwnedSkinEndpoints(name,skinId),{})
+      : this.httpClient.delete(this.backendProperties.getOwnedSkinEndpoints(name,skinId));
   }
 }

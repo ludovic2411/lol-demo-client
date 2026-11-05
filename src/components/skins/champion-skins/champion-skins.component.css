@@ -1,0 +1,11 @@
+/*@media screen and (width >= 800px){
+  .champion-skin-splash-small-screen {
+    display: none;
+  }
+}
+
+@media screen and (width < 800px){
+  .champion-skin-splash-large-screen {
+    display: none;
+  }
+}*/

@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChampionSkinsComponent } from './champion-skins.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {provideRouter} from '@angular/router';
-import {ChampionSkin} from '../../../models/backend/champions/ChampionSkin';
-import {ChampionFetchingService} from '../../../services/backend/champions/champion-fetching.service';
+import {ChampionSkin} from '../../../../models/backend/champions/ChampionSkin';
+import {ChampionFetchingService} from '../../../../services/backend/champions/champion-fetching.service';
 
 describe('ChampionSkinsComponent', () => {
   let component: ChampionSkinsComponent;

@@ -1,37 +1,40 @@
-import {Component, Input} from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
-import {ChampionSkin} from '../../../models/backend/champions/ChampionSkin';
-import {MatTooltip} from '@angular/material/tooltip';
-import {ChampionFetchingService} from '../../../services/backend/champions/champion-fetching.service';
+import { Component } from '@angular/core';
 
-@Component({
-    selector: 'app-champion-skins',
-  imports: [
-    NgOptimizedImage,
-    MatTooltip
-  ],
-    templateUrl: './champion-skins.component.html',
-    styleUrl: './champion-skins.component.css'
-})
-export class ChampionSkinsComponent {
+// champion-skins-base.component.ts
+import { Directive, inject, Input } from '@angular/core';
+import { ChampionSkin } from '../../../../models/backend/champions/ChampionSkin'
+import { ChampionFetchingService } from '../../../../services/backend/champions/champion-fetching.service';
+
+@Directive() // requis en Angular pour une classe de base avec @Input / DI
+export abstract class ChampionSkinsBaseComponent {
   @Input() skins: ChampionSkin[] = [];
   @Input() champion: string = '';
-  activeSkin: number = 0;
-  ownedSkinPlaceholder: string = "You own this skin in your collection";
-  checkSkinPlaceholder: string = "Mark skin as owned";
 
-  private champioFetchingService: ChampionFetchingService;
+  activeSkin = 0;
+  ownedSkinPlaceholder = 'You own this skin in your collection';
+  checkSkinPlaceholder = 'Mark skin as owned';
 
-  constructor(champioFetchingService: ChampionFetchingService) {
-    this.champioFetchingService = champioFetchingService;
+  protected championFetchingService = inject(ChampionFetchingService);
+
+  goToNextSkin(): void {
+    if (this.activeSkin < this.skins.length - 1) this.activeSkin++;
   }
 
-  goToNextSkin():void {
-    if(this.activeSkin < this.skins.length -1) this.activeSkin++;
+  goToPrevSkin(): void {
+    if (this.activeSkin > 0) this.activeSkin--;
   }
 
-  gotToPrevSkin(): void {
-    if(this.activeSkin > 0) this.activeSkin--;
+  toggleSkinOwned(skin: ChampionSkin): void {
+    skin.owned = !skin.owned;
+    this.championFetchingService
+      .updateOwnedChampionSkin(this.champion, skin.id, skin.owned)
+      .subscribe({
+        next: () =>
+          alert(skin.owned
+            ? `Skin: ${skin.name} added to your collection`
+            : `Skin: ${skin.name} removed from your collection`),
+        error: (err) => console.error(err),
+      });
   }
 
   startX: number = 0;
@@ -66,23 +69,12 @@ export class ChampionSkinsComponent {
     e.preventDefault();
   }
 
-
-  toggleSkinOwned(skin: ChampionSkin) {
-    skin.owned = !skin.owned;
-    this.champioFetchingService.updateOwnedChampionSkin(this.champion,skin.num, skin.owned).subscribe({
-      next: (res) => {
-      skin.owned ?  alert(`Skin: ${skin.name} added to your collection`) : alert(`Skin: ${skin.name} removed from your collection`)
-      },
-      error: (err) => console.error(err)
-    });
-  }
-
   handleSwipe(isrightswipe: boolean): void {
     console.log(isrightswipe)
     if (isrightswipe) {
       this.goToNextSkin();
     } else {
-      this.gotToPrevSkin();
+      this.goToPrevSkin();
     }
   }
 }

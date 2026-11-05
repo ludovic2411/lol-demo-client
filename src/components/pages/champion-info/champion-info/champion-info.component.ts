@@ -5,7 +5,7 @@ import {ChampionFetchingService} from '../../../../../services/backend/champions
 import {NgOptimizedImage} from '@angular/common';
 import {TextInfoComponent} from '../../../text-info/text-info.component';
 import {TagsWithIconComponent} from '../../../tags-with-icon/tags-with-icon.component';
-import { ChampionSkinsComponent } from '../../../champion-skins/champion-skins.component';
+import { ChampionSkinsComponent } from '../../../skins/champion-skins/champion-skins.component';
 import {firstValueFrom} from 'rxjs';
 
 @Component({
